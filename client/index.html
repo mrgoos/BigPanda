@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>BigPanda Task</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script>
+        angular.module('BigPandaApp', [])
+                .constant('ServerUrl', 'http://localhost:3000/')
+                .controller('myController', function ($scope, $http, ServerUrl) {
+                    
+					$scope.resetVars = function(){
+						$scope.currentStatus = 'waiting for server response...';
+						$scope.messages = '';
+					}
+					
+                    $scope.getCurrentStatus = function() {
+                        $http.get(ServerUrl + 'status')
+                                .then(function (result) {
+                                    if(result.data.status){
+                                      $scope.currentStatus = result.data.status;
+                                    }
+                                })
+                                .catch(function(err) {
+                                    //handle error
+                                    err.data&&alert(err) || alert('Error, No data recieved');
+                                });
+                    };
+					
+					$scope.getMessages = function () {
+                        $http.get(ServerUrl + 'messages')
+                                .then(function (result) {
+                                    if(result.data){
+                                      $scope.messages = result.data;
+                                    }
+                                })
+                                .catch(function(err) {
+									//handle error
+                                    err.data&&alert(err.data) || alert('Error, No data recieved');
+                                });
+                    };
+					
+					$scope.getData = function(){
+						$scope.resetVars();
+						$scope.getCurrentStatus();
+						$scope.getMessages();
+					}
+					$scope.getData();
+                });
+
+    </script>
+</head>
+<body ng-app="BigPandaApp" ng-cloak>
+<div ng-controller="myController">
+    <div>
+        <button ng-click="getData()">Refresh</button>
+		<br/><br/>
+        <div>
+            Current status: {{currentStatus}}
+        </div>
+    </div>
+    <br/>
+
+    <div ng-show="messages">
+        <div>
+		Availability:
+            <div ng-repeat="message in messages" >{{message.created_on | date:"dd/MM/yyyy HH:mm"}}: {{message.status}}: {{message.body}}</div>
+        </div>
+	</div>
+</div>
+</body>
+</html>
