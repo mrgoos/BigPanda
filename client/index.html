@@ -23,7 +23,12 @@
                                 })
                                 .catch(function(err) {
                                     //handle error
-                                    err.data&&alert(err) || alert('Error, No data recieved');
+                                    if(err.data){
+										alert(err.data);
+									}
+									else{
+										alert('Error, No data recieved');
+									}
                                 });
                     };
 					
@@ -36,7 +41,12 @@
                                 })
                                 .catch(function(err) {
 									//handle error
-                                    err.data&&alert(err.data) || alert('Error, No data recieved');
+                                    if(err.data){
+										alert(err.data);
+									}
+									else{
+										alert('Error, No data recieved');
+									}
                                 });
                     };
 					
