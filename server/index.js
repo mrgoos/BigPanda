@@ -14,7 +14,7 @@ app.get('/status', function (req, res) {
 });
 
 app.get('/messages', function (req, res) {
-	http.get('https://status.github.com/api/messages.jsooon', function(response) {
+	http.get('https://status.github.com/api/messages.json', function(response) {
 		handleResponse(response, req, res);	
 	}).on('error', function(e) {
 		console.log(e);
